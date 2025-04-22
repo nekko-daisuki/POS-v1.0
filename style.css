@@ -222,7 +222,6 @@ body {
 }
 
 .number-pad {
-  width:40%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   row-gap: 16px;

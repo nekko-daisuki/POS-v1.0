@@ -1,0 +1,271 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+.pos-container {
+  max-width: 1024px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: flex;
+  overflow: hidden;
+  height: 600px;
+}
+
+.order-panel {
+  width: 35%;
+  border-right: 1px solid #e0e0e0;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-panel {
+  width: 65%;
+  padding: 15px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+}
+
+.order-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.order-list {
+  flex-grow: 1;
+  overflow-y: auto;
+}
+
+.order-item {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.order-item-name {
+  flex-grow: 1;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+}
+
+.quantity-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 5px;
+}
+
+.quantity-input {
+  width: 40px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+.order-summary {
+  padding-top: 15px;
+  border-top: 1px solid #e0e0e0;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: auto;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  flex-grow: 1;
+  font-size: 16px;
+}
+
+.btn-cancel {
+  background-color: #ffb3b3;
+}
+
+.btn-pay {
+  background-color: #b3ffb3;
+}
+
+.category-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-bottom: 15px;
+}
+
+.menu-items {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 4px;
+}
+
+.category-btn{
+  height: 100%;
+  padding: 10px 10px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  background-color: #ddd;
+  cursor: pointer;
+  text-align: center;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-item-btn {
+  padding: 10px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: white;
+  cursor: pointer;
+  text-align: center;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.category-btn.active {
+  background-color: #c1d6ed;
+  border-color: #99ccff;
+}
+
+.menu-item-btn:hover {
+  background-color: #f0f0f0;
+}
+
+.menu-item-btn.red {
+  background-color: #ff4d4d;
+  color: white;
+}
+
+.menu-item-btn.blue {
+  background-color: #3366ff;
+  color: white;
+}
+
+.menu-item-btn.yellow {
+  background-color: #ffcc00;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* 会計画面のスタイル */
+.payment-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.payment-container {
+  background-color: #a8c8ff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+  text-align: center;
+}
+
+.payment-total {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.payment-details {
+  margin-bottom: 20px;
+  font-size: 18px;
+  text-align: right;
+  padding-right: 80px;
+}
+
+.payment-details div {
+  margin-bottom: 5px;
+}
+
+.number-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin-bottom: 20px;
+  background-color: #4d94ff;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.num-key {
+  padding: 15px;
+  font-size: 24px;
+  background-color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.payment-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.payment-btn {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  flex-grow: 1;
+  font-size: 16px;
+}
+
+.btn-cancel-payment {
+  background-color: #ffb3b3;
+}
+
+.btn-complete {
+  background-color: #b3ffb3;
+}
+
+.grid-background {
+  background-image: linear-gradient(#ddd 1px, transparent 1px),
+                   linear-gradient(90deg, #ddd 1px, transparent 1px);
+  background-size: 20px 20px;
+  background-position: 0 0;
+}

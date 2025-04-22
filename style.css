@@ -230,8 +230,8 @@ body {
   margin-bottom: 20px;
   padding: 10px;
   border-radius: 5px;
-  align: center
   justify-content: center;
+  align-items: center;
 }
 
 .num-key {

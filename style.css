@@ -206,7 +206,6 @@ body {
 }
 
 .payment-total {
-  transform:rotate(180deg);
   font-size: 60px;
   margin-bottom: 20px;
 }

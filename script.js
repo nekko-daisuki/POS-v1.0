@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // 支払い画面を表示
       paymentScreen.classList.remove('hidden');
-      paymentTotal.textContent = `${totalCount}点 合計 ¥${totalAmount}`;
+      paymentTotal.textContent = `合計 ¥${totalAmount}`;
       receivedAmount = 0;
       updatePaymentDisplay();
   });
@@ -195,9 +195,9 @@ document.addEventListener('DOMContentLoaded', function() {
       key.addEventListener('click', function() {
           const keyValue = this.textContent;
           
-          if (keyValue === '←') {
+          if (keyValue === 'C') {
               // 削除キー
-              receivedAmount = Math.floor(receivedAmount / 10);
+              receivedAmount = Math.floor(receivedAmount = 0);
           } else if (keyValue === '00') {
               // 00キー
               receivedAmount = receivedAmount * 100;
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // 支払い画面を閉じる
       paymentScreen.classList.add('hidden');
       
-      alert('会計が完了しました');
+      alert('支払いが完了しました。\nおつり：' + change);
   });
   
   // スプレッドシートに送信する関数

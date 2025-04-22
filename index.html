@@ -1,92 +1,331 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POSレジシステム</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="pos-container">
-        <div class="order-panel">
-            <h2 class="order-title">注文リスト</h2>
-            <div class="order-list" id="orderList">
-                <!-- 注文アイテムはJavaScriptで動的に生成 -->
-            </div>
-            <div class="order-summary" id="orderSummary">
-                0点 合計 ¥0
-            </div>
-            <div class="action-buttons">
-                <button class="btn btn-cancel" id="cancelOrderBtn">取り消し</button>
-                <button class="btn btn-pay" id="paymentBtn">支払いへ</button>
-            </div>
-        </div>
-        <div class="menu-panel">
-            <div class="category-tabs">
-                <button class="category-btn active" data-category="coffee">コーヒー</button>
-                <button class="category-btn" data-category="tea">ソフト<br>ドリンク</button>
-                <button class="category-btn" data-category="food">フード</button>
-                <button class="category-btn" data-category="other">その他</button> 
-            </div>
-            <div class="menu-items category-content" id="coffee-menu">
-                <button class="menu-item-btn" data-name="浅煎り" data-price="400">浅煎り</button>
-                <button class="menu-item-btn" data-name="深煎り" data-price="400">深煎り</button>
-                <button class="menu-item-btn" data-name="スペシャル" data-price="500">スペシャル</button>
-                <button class="menu-item-btn" data-name="デカフェ" data-price="400">デカフェ</button>
-                <button class="menu-item-btn" data-name="アイス" data-price="400">アイス<br>コーヒー</button>
-                <button class="menu-item-btn" data-name="アイスカフェオレ" data-price="500">アイス<br>カフェオレ</button>
-            </div>
-            <div class="menu-items category-content hidden" id="tea-menu">
-                <button class="menu-item-btn" data-name="レモネード" data-price="200">レモネード</button>
-                <button class="menu-item-btn" data-name="アップル" data-price="200">アップル<br>ジュース</button>
-                <button class="menu-item-btn" data-name="アイスミルク" data-price="200">アイス<br>ミルク</button>
-                <button class="menu-item-btn" data-name="アイスティー" data-price="200">アイス<br>ティー</button>
-            </div>
-            <div class="menu-items category-content hidden" id="food-menu">
-                <button class="menu-item-btn" data-name="チョコレート" data-price="150">チョコレート</button>
-                <button class="menu-item-btn" data-name="クッキー" data-price="150">クッキー</button>
-                <button class="menu-item-btn" data-name="マドレーヌ" data-price="150">マドレーヌ</button>
-                <button class="menu-item-btn" data-name="フィナンシェ" data-price="150">フィナンシェ</button>
-            </div>
-            <div class="menu-items category-content hidden" id="other-menu">
-                <button class="menu-item-btn" data-name="ディップスタイル" data-price="200">ディップ<br>スタイル</button>
-                <button class="menu-item-btn" data-name="ディップスタイル5個" data-price="1000">ディップ<br>スタイル<br>5個</button>
-                <button class="menu-item-btn" data-name="ステッカー" data-price="100">ステッカー</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 支払い画面 (最初は非表示) -->
-    <div class="payment-screen hidden" id="paymentScreen">
-        <div class="payment-container grid-background">
-            <div class="payment-total" id="paymentTotal">
-                合計 ¥0
-            </div>
-            <div class="payment-details">
-                <div>預かり金額 <span id="receivedAmount">¥0</span></div>
-                <div>お釣り <span id="changeAmount">¥0</span></div>
-            </div>
-            <div class="number-pad">
-                <button class="num-key">7</button>
-                <button class="num-key">8</button>
-                <button class="num-key">9</button>
-                <button class="num-key">4</button>
-                <button class="num-key">5</button>
-                <button class="num-key">6</button>
-                <button class="num-key">1</button>
-                <button class="num-key">2</button>
-                <button class="num-key">3</button>
-                <button class="num-key">C</button>
-                <button class="num-key">0</button>
-                <button class="num-key">00</button>
-            </div>
-            <div class="payment-actions">
-                <button class="payment-btn btn-cancel-payment" id="cancelPaymentBtn">取り消し</button>
-                <button class="payment-btn btn-complete" id="completeBtn">会計する</button>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
-</body>
-</html>
+document.addEventListener('DOMContentLoaded', function() {
+  // 商品データ (実際にはデータベースやAPIから取得することを想定)
+  const menuItems = {
+      coffee: [
+          {name: 'コーヒー', price: 300},
+          {name: '浅煎り', price: 320},
+          {name: '深煎り', price: 320},
+          {name: 'スペシャル', price: 400},
+          {name: 'デカフェ', price: 350},
+          {name: 'アイス', price: 350},
+          {name: 'アイスカフェ', price: 400}
+      ],
+      tea: [
+          {name: 'ソフトドリンク', price: 250},
+          {name: 'レモンティー', price: 300},
+          {name: 'りんご', price: 300},
+          {name: 'ミルクティー', price: 350},
+          {name: 'ティー', price: 300}
+      ],
+      food: [
+          {name: 'フード', price: 400},
+          {name: 'チョコ', price: 250},
+          {name: 'サンドイッチ', price: 450},
+          {name: 'ケーキ', price: 500}
+      ],
+      other: [
+          {name: 'その他1', price: 200},
+          {name: 'その他2', price: 300}
+      ]
+  };
+  
+  // 注文データを保持する配列
+  let orderItems = [];
+  let totalAmount = 0;
+  let totalCount = 0;
+  let receivedAmount = 0;
+  
+  // DOM要素の取得
+  const orderList = document.getElementById('orderList');
+  const orderSummary = document.getElementById('orderSummary');
+  const paymentBtn = document.getElementById('paymentBtn');
+  const cancelOrderBtn = document.getElementById('cancelOrderBtn');
+  const categoryBtns = document.querySelectorAll('.category-btn');
+  const menuItemBtns = document.querySelectorAll('.menu-item-btn');
+  const paymentScreen = document.getElementById('paymentScreen');
+  const paymentTotal = document.getElementById('paymentTotal');
+  const receivedAmountDisplay = document.getElementById('receivedAmount');
+  const changeAmountDisplay = document.getElementById('changeAmount');
+  const numKeys = document.querySelectorAll('.num-key');
+  const cancelPaymentBtn = document.getElementById('cancelPaymentBtn');
+  const completeBtn = document.getElementById('completeBtn');
+  
+  // 会計画面が最初から表示されないようにする
+  paymentScreen.classList.add('hidden');
+  
+  // カテゴリータブの切り替え処理
+  categoryBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+          // アクティブなカテゴリーを更新
+          categoryBtns.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          
+          // カテゴリーコンテンツの表示/非表示を切り替え
+          const categoryId = this.getAttribute('data-category');
+          document.querySelectorAll('.category-content').forEach(content => {
+              content.classList.add('hidden');
+          });
+          document.getElementById(categoryId + '-menu').classList.remove('hidden');
+      });
+  });
+  
+  // メニューアイテムのクリックイベント
+  menuItemBtns.forEach(btn => {
+      btn.addEventListener('click', function() {
+          const itemName = this.getAttribute('data-name');
+          const itemPrice = parseInt(this.getAttribute('data-price'));
+          
+          // 既存のアイテムかどうかチェック
+          const existingItemIndex = orderItems.findIndex(item => item.name === itemName);
+          
+          if (existingItemIndex !== -1) {
+              // 既存のアイテムの場合は数量を増加
+              orderItems[existingItemIndex].quantity++;
+          } else {
+              // 新しいアイテムの場合は注文リストに追加
+              orderItems.push({
+                  name: itemName,
+                  price: itemPrice,
+                  quantity: 1
+              });
+          }
+          
+          // 注文リストを更新
+          updateOrderList();
+      });
+  });
+  
+  // 注文リストの更新関数
+  function updateOrderList() {
+      // 注文リストをクリア
+      orderList.innerHTML = '';
+      
+      // 合計金額と合計点数を初期化
+      totalAmount = 0;
+      totalCount = 0;
+      
+      // 各注文アイテムについて処理
+      orderItems.forEach((item, index) => {
+          // 注文アイテムの要素を作成
+          const orderItemElement = document.createElement('div');
+          orderItemElement.className = 'order-item';
+          
+          // 注文アイテム名
+          const nameElement = document.createElement('div');
+          nameElement.className = 'order-item-name';
+          nameElement.textContent = `${item.name}`;
+          
+          // 数量コントロール
+          const quantityControl = document.createElement('div');
+          quantityControl.className = 'quantity-control';
+          
+          // マイナスボタン
+          const minusBtn = document.createElement('button');
+          minusBtn.className = 'quantity-btn';
+          minusBtn.textContent = '-';
+          minusBtn.addEventListener('click', function() {
+              if (item.quantity > 1) {
+                  item.quantity--;
+              } else {
+                  // 数量が1の場合は削除
+                  orderItems.splice(index, 1);
+              }
+              updateOrderList();
+          });
+          
+          // 数量入力欄
+          const quantityInput = document.createElement('input');
+          quantityInput.className = 'quantity-input';
+          quantityInput.type = 'text';
+          quantityInput.value = item.quantity;
+          quantityInput.readOnly = true;
+          
+          // プラスボタン
+          const plusBtn = document.createElement('button');
+          plusBtn.className = 'quantity-btn';
+          plusBtn.textContent = '+';
+          plusBtn.addEventListener('click', function() {
+              item.quantity++;
+              updateOrderList();
+          });
+          
+          // 数量コントロールに子要素を追加
+          quantityControl.appendChild(minusBtn);
+          quantityControl.appendChild(quantityInput);
+          quantityControl.appendChild(plusBtn);
+          
+          // 注文アイテムに子要素を追加
+          orderItemElement.appendChild(nameElement);
+          orderItemElement.appendChild(quantityControl);
+          
+          // 注文リストに追加
+          orderList.appendChild(orderItemElement);
+          
+          // 合計金額と点数を更新
+          totalAmount += item.price * item.quantity;
+          totalCount += item.quantity;
+      });
+      
+      // 合計表示を更新
+      orderSummary.textContent = `${totalCount}点 合計 ¥${totalAmount}`;
+  }
+  
+  // 注文取り消しボタンのクリックイベント
+  cancelOrderBtn.addEventListener('click', function() {
+      orderItems = [];
+      updateOrderList();
+  });
+  
+  // 支払いボタンのクリックイベント
+  paymentBtn.addEventListener('click', function() {
+      if (orderItems.length === 0) {
+          alert('注文アイテムがありません');
+          return;
+      }
+      
+      // 支払い画面を表示
+      paymentScreen.classList.remove('hidden');
+      paymentTotal.textContent = `合計 ¥${totalAmount}`;
+      receivedAmount = 0;
+      updatePaymentDisplay();
+  });
+  
+  // 数字キーパッドのクリックイベント
+  numKeys.forEach(key => {
+      key.addEventListener('click', function() {
+          const keyValue = this.textContent;
+          
+          if (keyValue === 'C') {
+              // 削除キー
+              receivedAmount = Math.floor(receivedAmount = 0);
+          } else if (keyValue === '00') {
+              // 00キー
+              receivedAmount = receivedAmount * 100;
+          } else {
+              // 数字キー
+              receivedAmount = receivedAmount * 10 + parseInt(keyValue);
+          }
+          
+          updatePaymentDisplay();
+      });
+  });
+  
+  // 支払い表示の更新関数
+  function updatePaymentDisplay() {
+      receivedAmountDisplay.textContent = `¥${receivedAmount}`;
+      const change = receivedAmount - totalAmount;
+      changeAmountDisplay.textContent = `¥${Math.max(0, change)}`;
+      
+      // お釣りがマイナスの場合はボタンを無効化
+      if (change < 0) {
+          completeBtn.disabled = true;
+          completeBtn.style.opacity = 0.5;
+      } else {
+          completeBtn.disabled = false;
+          completeBtn.style.opacity = 1;
+      }
+  }
+  
+  // 支払いキャンセルボタンのクリックイベント
+  cancelPaymentBtn.addEventListener('click', function() {
+      paymentScreen.classList.add('hidden');
+  });
+  
+  // 会計完了ボタンのクリックイベント
+  completeBtn.addEventListener('click', function() {
+      if (receivedAmount < totalAmount) {
+          alert('預り金額が不足しています');
+          return;
+      }
+      
+      // スプレッドシートに送信する処理
+      saveToSpreadsheet();
+      
+      // 注文をリセット
+      orderItems = [];
+      updateOrderList();
+      
+      // 支払い画面を閉じる
+      paymentScreen.classList.add('hidden');
+      
+      alert('支払いが完了しました。\nおつり：' + change);
+  });
+  
+  // スプレッドシートに送信する関数
+  function saveToSpreadsheet() {
+      // ここにGoogle Apps Scriptなどを使用したスプレッドシート連携のコードを追加
+      // 以下はダミーコード
+      console.log('注文データをスプレッドシートに保存: ', {
+          timestamp: new Date().toISOString(),
+          items: orderItems,
+          totalAmount: totalAmount,
+          totalCount: totalCount,
+          receivedAmount: receivedAmount,
+          changeAmount: receivedAmount - totalAmount
+      });
+      
+      // 実際の実装では、Google Apps ScriptのWebアプリケーションにデータを送信する
+      // fetch('あなたのGASウェブアプリURL', {
+      //     method: 'POST',
+      //     mode: 'no-cors',
+      //     headers: {
+      //         'Content-Type': 'application/json',
+      //     },
+      //     body: JSON.stringify({
+      //         timestamp: new Date().toISOString(),
+      //         items: orderItems,
+      //         totalAmount: totalAmount,
+      //         totalCount: totalCount,
+      //         receivedAmount: receivedAmount,
+      //         changeAmount: receivedAmount - totalAmount
+      //     })
+      // })
+      // .then(response => console.log('注文データを送信しました'))
+      // .catch(error => console.error('エラー:', error));
+  }
+  
+  // Google Apps Script連携のためのコード例
+  function createGoogleAppsScriptCode() {
+      const code = `
+      // Google Apps Script側のコード例
+      function doPost(e) {
+        try {
+          // リクエストからJSONデータを取得
+          var data = JSON.parse(e.postData.contents);
+          
+          // スプレッドシートを開く
+          var ss = SpreadsheetApp.openById('あなたのスプレッドシートID');
+          var sheet = ss.getSheetByName('売上データ') || ss.insertSheet('売上データ');
+          
+          // 注文アイテムごとにデータを追加
+          data.items.forEach(function(item) {
+            sheet.appendRow([
+              new Date(), // タイムスタンプ
+              item.name, // 商品名
+              item.price, // 単価
+              item.quantity, // 数量
+              item.price * item.quantity, // 小計
+            ]);
+          });
+          
+          // 会計情報も別シートに記録することも可能
+          var summarySheet = ss.getSheetByName('会計サマリー') || ss.insertSheet('会計サマリー');
+          summarySheet.appendRow([
+            new Date(), // タイムスタンプ
+            data.totalCount, // 合計点数
+            data.totalAmount, // 合計金額
+            data.receivedAmount, // 預かり金額
+            data.changeAmount // お釣り
+          ]);
+          
+          return ContentService.createTextOutput(JSON.stringify({success: true}))
+            .setMimeType(ContentService.MimeType.JSON);
+        } catch (error) {
+          return ContentService.createTextOutput(JSON.stringify({success: false, error: error.toString()}))
+            .setMimeType(ContentService.MimeType.JSON);
+        }
+      }
+      `;
+      console.log("Google Apps Script連携用のコード例:", code);
+  }
+});

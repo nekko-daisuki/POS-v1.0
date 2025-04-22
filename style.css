@@ -201,13 +201,13 @@ body {
   background-color: white;
   padding: 20px;
   border-radius: 10px;
-  width: 400px;
+  width: 60%;
   text-align: center;
 }
 
 .payment-total {
   transform:rotate(180deg);
-  font-size: 72px;
+  font-size: 60px;
   margin-bottom: 20px;
 }
 
@@ -223,6 +223,7 @@ body {
 }
 
 .number-pad {
+  width:40%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   row-gap: 16px;
@@ -230,6 +231,7 @@ body {
   margin-bottom: 20px;
   padding: 10px;
   border-radius: 5px;
+  justify-content: center;
 }
 
 .num-key {

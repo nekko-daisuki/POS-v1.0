@@ -206,13 +206,14 @@ body {
 }
 
 .payment-total {
-  font-size: 48px;
+  transform:rotate(180deg);
+  font-size: 72px;
   margin-bottom: 20px;
 }
 
 .payment-details {
   margin-bottom: 20px;
-  font-size: 18px;
+  font-size: 40px;
   text-align: right;
   padding-right: 80px;
 }

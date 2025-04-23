@@ -2,29 +2,30 @@ document.addEventListener('DOMContentLoaded', function() {
   // 商品データ (実際にはデータベースやAPIから取得することを想定)
   const menuItems = {
       coffee: [
-          {name: '浅煎り', price: 400},
-          {name: '深煎り', price: 400},
-          {name: 'スペシャル', price: 500},
-          {name: 'デカフェ', price: 400},
-          {name: 'アイスコーヒー', price: 400},
-          {name: 'アイスカフェオレ', price: 400}
+          {name: 'コーヒー', price: 300},
+          {name: '浅煎り', price: 320},
+          {name: '深煎り', price: 320},
+          {name: 'スペシャル', price: 400},
+          {name: 'デカフェ', price: 350},
+          {name: 'アイス', price: 350},
+          {name: 'アイスカフェ', price: 400}
       ],
-      soft: [
-          {name: 'レモネード', price: 200},
-          {name: 'アップルジュース', price: 200},
-          {name: 'アイスミルク', price: 200},
-          {name: 'アイスティー', price: 200}
+      tea: [
+          {name: 'ソフトドリンク', price: 250},
+          {name: 'レモンティー', price: 300},
+          {name: 'りんご', price: 300},
+          {name: 'ミルクティー', price: 350},
+          {name: 'ティー', price: 300}
       ],
       food: [
-          {name: 'チョコレート', price: 150},
-          {name: 'クッキー', price: 150},
-          {name: 'フィナンシェ', price: 150},
-          {name: 'マドレーヌ', price: 150}
+          {name: 'フード', price: 400},
+          {name: 'チョコ', price: 250},
+          {name: 'サンドイッチ', price: 450},
+          {name: 'ケーキ', price: 500}
       ],
       other: [
-          {name: 'ディップスタイル', price: 200},
-          {name: 'ディップスタイル5個', price: 1000},
-          {name: 'ステッカー', price: 100}
+          {name: 'その他1', price: 200},
+          {name: 'その他2', price: 300}
       ]
   };
   

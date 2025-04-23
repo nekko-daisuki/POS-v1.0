@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
           
           if (keyValue === 'C') {
               // 削除キー
-              receivedAmount = Math.floor(receivedAmount = 0);
+              receivedAmount = Math.floor(0);
           } else if (keyValue === '00') {
               // 00キー
               receivedAmount = receivedAmount * 100;
@@ -227,105 +227,57 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // 支払いキャンセルボタンのクリックイベント
-  cancelPaymentBtn.addEventListener('click', function() {
+    cancelPaymentBtn.addEventListener('click', function() {
       paymentScreen.classList.add('hidden');
   });
   
   // 会計完了ボタンのクリックイベント
-  completeBtn.addEventListener('click', function() {
-      if (receivedAmount < totalAmount) {
-          alert('預り金額が不足しています');
-          return;
-      }
-      
-      // スプレッドシートに送信する処理
-      saveToSpreadsheet();
-      
-      // 注文をリセット
-      orderItems = [];
-      updateOrderList();
-      
-      // 支払い画面を閉じる
-      paymentScreen.classList.add('hidden');
-      
-      alert('支払いが完了しました。\nおつり：' + change);
-  });
+    completeBtn.addEventListener('click', function() {
+        if (receivedAmount < totalAmount) {
+            alert('預り金額が不足しています');
+            return;
+        }
+    
+    // おつりを計算
+    const changeAmount = receivedAmount - totalAmount;
+    
+    // スプレッドシートに送信する処理
+    try {
+        saveToSpreadsheet();
+        
+        // 注文をリセット
+        orderItems = [];
+        updateOrderList();
+        
+        // 支払い画面を閉じる
+        paymentScreen.classList.add('hidden');
+        
+        // 完了メッセージを表示
+        alert('支払いが完了しました。\nおつり：¥' + changeAmount);
+    } catch (error) {
+        alert('エラーが発生しました: ' + error.message);
+    }
+});
   
   // スプレッドシートに送信する関数
   function saveToSpreadsheet() {
-      // ここにGoogle Apps Scriptなどを使用したスプレッドシート連携のコードを追加
-      // 以下はダミーコード
-      console.log('注文データをスプレッドシートに保存: ', {
-          timestamp: new Date().toISOString(),
-          items: orderItems,
-          totalAmount: totalAmount,
-          totalCount: totalCount,
-          receivedAmount: receivedAmount,
-          changeAmount: receivedAmount - totalAmount
-      });
-      
-      // 実際の実装では、Google Apps ScriptのWebアプリケーションにデータを送信する
-      // fetch('あなたのGASウェブアプリURL', {
-      //     method: 'POST',
-      //     mode: 'no-cors',
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify({
-      //         timestamp: new Date().toISOString(),
-      //         items: orderItems,
-      //         totalAmount: totalAmount,
-      //         totalCount: totalCount,
-      //         receivedAmount: receivedAmount,
-      //         changeAmount: receivedAmount - totalAmount
-      //     })
-      // })
-      // .then(response => console.log('注文データを送信しました'))
-      // .catch(error => console.error('エラー:', error));
-  }
-  
-  // Google Apps Script連携のためのコード例
-  function createGoogleAppsScriptCode() {
-      const code = `
-      // Google Apps Script側のコード例
-      function doPost(e) {
-        try {
-          // リクエストからJSONデータを取得
-          var data = JSON.parse(e.postData.contents);
-          
-          // スプレッドシートを開く
-          var ss = SpreadsheetApp.openById('あなたのスプレッドシートID');
-          var sheet = ss.getSheetByName('売上データ') || ss.insertSheet('売上データ');
-          
-          // 注文アイテムごとにデータを追加
-          data.items.forEach(function(item) {
-            sheet.appendRow([
-              new Date(), // タイムスタンプ
-              item.name, // 商品名
-              item.price, // 単価
-              item.quantity, // 数量
-              item.price * item.quantity, // 小計
-            ]);
-          });
-          
-          // 会計情報も別シートに記録することも可能
-          var summarySheet = ss.getSheetByName('会計サマリー') || ss.insertSheet('会計サマリー');
-          summarySheet.appendRow([
-            new Date(), // タイムスタンプ
-            data.totalCount, // 合計点数
-            data.totalAmount, // 合計金額
-            data.receivedAmount, // 預かり金額
-            data.changeAmount // お釣り
-          ]);
-          
-          return ContentService.createTextOutput(JSON.stringify({success: true}))
-            .setMimeType(ContentService.MimeType.JSON);
-        } catch (error) {
-          return ContentService.createTextOutput(JSON.stringify({success: false, error: error.toString()}))
-            .setMimeType(ContentService.MimeType.JSON);
-        }
-      }
-      `;
-      console.log("Google Apps Script連携用のコード例:", code);
+
+      fetch('https://script.google.com/macros/s/AKfycby4Q9CaF1tSf3HsdS2aHIZOIfTZBKLutsSJwtq2WD8ZiVAL-aZR3WFpWbBYh8Xgym6d/exec', {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              timestamp: new Date().toISOString(),
+              items: orderItems,
+              totalAmount: totalAmount,
+              totalCount: totalCount,
+              receivedAmount: receivedAmount,
+              changeAmount: receivedAmount - totalAmount
+          })
+      })
+      .then(response => console.log('注文データを送信しました'))
+      .catch(error => console.error('エラー:', error));
   }
 });
